@@ -37,10 +37,9 @@ class ExportController extends Controller
                 Carbon::parse($article->created_at)->format('m/d/Y h:i A'),
                 Carbon::parse($article->published_at)->format('m/d/Y h:i A'),
                 Carbon::parse($article->updated_at)->format('m/d/Y h:i A'),
-                $article->category->title,
-                $article->authors->pluck('full_name')->implode(', '),
-                env('APP_URL').'/'.$article->images()->where('is_main', true)->first()->path.$article->images()->where('is_main', true)->first()->name
-                //
+                strtoupper($article->category->title),
+                empty($article->authors()->get()->pluck('full_name')->implode(' ,')) ? "Deschide.md" : $article->authors()->get()->pluck('full_name')->implode(' ,'),
+                is_null($article->images()->where('is_main',true)->first()) ? '' : env('APP_URL').'storage/images/'.$article->images()->where('is_main',true)->first()->name,
             ]);
         }
         $csv->output('articles.csv');
