@@ -34,5 +34,9 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'elastic' => [
+        'enabled' => env('ELASTIC_ENABLED', false),
+        'hosts' => explode(',', env('ELASTIC_HOSTS')),
+    ]
 
 ];

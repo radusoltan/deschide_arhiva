@@ -2,30 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Http;
+use App\Models\Category;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class ImportController extends Controller
 {
     public function import(Request $request){
 
-        $articlesUrl = "https://deschide.md/api/articles.json";
+        $url = 'https://deschide.md/api/articles.json';
+        $response = Http::get($url);
 
-        $resp = Http::withQueryParameters([
-            'language' => 'ro',
-//            'section' => $category->old_number,
-            'items_per_page' => 100,
-            'sort[number]' => 'desc',
-            'type' => 'stiri',
-            'page' => 1,
-//            "access_token" => "NTRjZDZjNDI3OWFjMTQwNjZiZjIxZjFkMTFhMjkyZjc0YTdmOGFmNTA4ZDVlMWRmNTc1NzFjNjI4ZTQyYmY4MQ"
-        ])->timeout(360)
-            ->withOptions(['verify' => FALSE])->accept('application/json')->get($articlesUrl);
+        dump($response->object());
 
-        foreach($resp->object()->items as $article){
-            $article = $this->getArticleByNumber($article->number);
-            dump($article);
-        }
+
+
 
     }
 

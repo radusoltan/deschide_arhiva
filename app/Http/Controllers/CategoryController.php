@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ArticleResource;
+use App\Http\Resources\CategoryResource;
+use App\Http\Resources\Article;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -12,7 +15,11 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        return CategoryResource::collection(
+            Category::translatedIn(app()->getLocale())
+                ->whereTranslation('in_menu', true)
+                ->get()
+        );
     }
 
     /**
@@ -34,9 +41,25 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Category $category)
+    public function show($slug)
     {
-        //
+        $category = Category::translatedIn(app()->getLocale())
+            ->whereTranslation('slug', $slug)->firstOrFail();
+
+
+        return new CategoryResource($category);
+    }
+
+    public function getCategoryArticles($slug){
+        $category = Category::translatedIn(app()->getLocale())
+            ->whereTranslation('slug', $slug)->firstOrFail();
+
+        return ArticleResource::collection(
+            $category->articles()
+                ->translatedIn(app()->getLocale())
+                ->paginate(12)
+        );
+
     }
 
     /**

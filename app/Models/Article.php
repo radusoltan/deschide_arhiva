@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Observers\ArticleOserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+#[ObservedBy([ArticleOserver::class])]
 class Article extends Model implements TranslatableContract
 {
     use HasFactory;
@@ -54,7 +57,7 @@ class Article extends Model implements TranslatableContract
     }
 
     public function images(){
-        return $this->belongsToMany(Image::class, 'article_images');
+        return $this->belongsToMany(Image::class, 'article_images')->withPivot('is_main');
     }
 
 }
