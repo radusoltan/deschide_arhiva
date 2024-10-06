@@ -10,4 +10,5 @@ Route::get('/', function(){
 
 //Route::get('/', [\App\Http\Controllers\ImportController::class. 'import']);
 Route::get('/export-csv', [\App\Http\Controllers\ExportController::class, 'exportCSV'])->middleware('set_locale');
+Route::get('yt-import', [\App\Http\Controllers\ExportController::class, 'importYT']);
 require __DIR__.'/auth.php';

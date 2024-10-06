@@ -7,6 +7,7 @@
     "require": {
         "php": "^8.2",
         "5balloons/laravel-smart-ads": "^1.2",
+        "alaouy/youtube": "^2.2",
         "astrotomic/laravel-translatable": "^11.15",
         "elasticsearch/elasticsearch": "^8.15",
         "intervention/image": "^3.8",
