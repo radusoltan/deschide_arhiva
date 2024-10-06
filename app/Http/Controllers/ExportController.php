@@ -34,28 +34,15 @@ class ExportController extends Controller
                 $article->title,
                 $article->slug,
                 $article->body,
-                $article->created_at,
-                $article->published_at,
-                $article->updated_at,
-                $article->category->title,
-                $article->authors->pluck('full_name')->implode(', '),
-                $article->images()->where('is_main', true)->first()
-            ]);
-
-            dump([
-                $article->title,
-                $article->slug,
-                $article->body,
                 Carbon::parse($article->created_at)->format('m/d/Y h:i A'),
                 Carbon::parse($article->published_at)->format('m/d/Y h:i A'),
                 Carbon::parse($article->updated_at)->format('m/d/Y h:i A'),
                 $article->category->title,
                 $article->authors->pluck('full_name')->implode(', '),
                 env('APP_URL').'/'.$article->images()->where('is_main', true)->first()->path.$article->images()->where('is_main', true)->first()->name
-//
+                //
             ]);
-
-
         }
+        $csv->output('articles.csv');
     }
 }
