@@ -62,4 +62,16 @@ class ImageController extends Controller
     {
         //
     }
+
+    public function getImgSrc(Request $request){
+
+        if($request->has('amp;ImageId')) {
+
+            $image = Image::where('old_number', $request->get('amp;ImageId'))->first();
+
+            return env('APP_URL').'/'.$image->path.$image->name;
+
+        }
+
+    }
 }

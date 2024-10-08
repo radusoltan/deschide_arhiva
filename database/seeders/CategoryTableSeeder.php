@@ -17,7 +17,7 @@ class CategoryTableSeeder extends Seeder
     {
         foreach(config('translatable.locales') as $locale) {
 
-            $url = "https://deschide.md/api/sections?page=1&items_per_page=100&language=$locale";
+            $url = "http://arhiva.deschide.md/api/sections?page=1&items_per_page=100&language=$locale";
             $response = Http::get($url);
 
             app()->setLocale($locale);

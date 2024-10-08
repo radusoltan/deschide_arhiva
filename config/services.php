@@ -37,6 +37,11 @@ return [
     'elastic' => [
         'enabled' => env('ELASTIC_ENABLED', false),
         'hosts' => explode(',', env('ELASTIC_HOSTS')),
+    ],
+    'facebook' => [
+        'app_id' => env('FACEBOOK_APP_ID'),
+        'app_secret' => env('FACEBOOK_APP_SECRET'),
+        'default_access_token' => env('FACEBOOK_ACCESS_TOKEN'),
     ]
 
 ];
