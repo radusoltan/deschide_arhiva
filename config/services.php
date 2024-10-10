@@ -39,8 +39,9 @@ return [
         'hosts' => explode(',', env('ELASTIC_HOSTS')),
     ],
     'facebook' => [
-        'app_id' => env('FACEBOOK_APP_ID'),
-        'app_secret' => env('FACEBOOK_APP_SECRET'),
+        'client_id' => env('FACEBOOK_APP_ID'),
+        'client_secret' => env('FACEBOOK_APP_SECRET'),
+        'redirect' => 'http://localhost:8000/auth/facebook/callback',
         'default_access_token' => env('FACEBOOK_ACCESS_TOKEN'),
     ]
 

@@ -16,6 +16,7 @@ class ArticleResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'locale' => app()->getLocale(),
             'title' => $this->title,
             'category' => new CategoryResource($this->category),
             'slug' => $this->slug,

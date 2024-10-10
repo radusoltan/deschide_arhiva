@@ -14,7 +14,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        return ArticleResource::collection(Article::translatedIn(app()->getLocale())->paginate(12));
+        return ArticleResource::collection(Article::translatedIn(app()->getLocale())->get());
     }
 
     public function getArticles(Category $category) {

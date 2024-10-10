@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Category;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
@@ -22,7 +23,29 @@ class CategoryTableSeeder extends Seeder
 
             app()->setLocale($locale);
 
-            foreach ($response->object()->items as $item){
+            $allSections = collect($response->object()->items);
+
+            $idsRO = [1,2,3,4,5,6, 7, 8, 10, 20, 22, 23, 25, 26];
+            $idsEN = [1,2,3,4,5,6,7,8];
+            $idsRU = [1,2,3,4,5,6,7,8,23,25,26];
+
+            $filteredSections = new Collection();
+
+            if ($locale === 'ro'){
+                $filteredSections = $allSections->filter(function ($section) use ($idsRO){
+                    return in_array($section->number, $idsRO);
+                });
+            } elseif ($locale === 'en'){
+                $filteredSections = $allSections->filter(function ($section) use ($idsEN){
+                    return in_array($section->number, $idsEN);
+                });
+            } elseif ($locale === 'ru'){
+                $filteredSections = $allSections->filter(function ($section) use ($idsRU){
+                    return in_array($section->number, $idsRU);
+                });
+            }
+
+            foreach ($filteredSections->all() as $item){
                 $category = Category::where("old_number", $item->number)->first();
 
                 if (!$category) {

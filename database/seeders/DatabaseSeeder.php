@@ -15,20 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             CategoryTableSeeder::class,
-            AdvertorialSeeder::class,
-            AlegeriSeeder::class,
-            AntiFakeSeeder::class,
-            CulturaSeeder::class,
-            EconomicSeeder::class,
-            EditorialSeeder::class,
-            ExterneSeeder::class,
-            InterviuSeeder::class,
-            InvestigatiiSeeder::class,
-            OpiniiSeeder::class,
-            PoliticSeeder::class,
-            SocialSeeder::class,
-            SportSeeder::class,
-            TransnistriaSeeder::class
+            ArticlesTableSeeder::class,
         ]);
     }
 }

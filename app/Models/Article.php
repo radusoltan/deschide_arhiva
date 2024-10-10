@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Http\Resources\ArticleResource;
+use App\Models\Traits\Searchable;
 use App\Observers\ArticleOserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,6 +18,7 @@ class Article extends Model implements TranslatableContract
     use HasFactory;
     use Translatable;
     use SoftDeletes;
+    use Searchable;
 
     public array $translatedAttributes = [
         'title',
@@ -58,6 +61,10 @@ class Article extends Model implements TranslatableContract
 
     public function images(){
         return $this->belongsToMany(Image::class, 'article_images')->withPivot('is_main');
+    }
+
+    public function toSearchArray(){
+        return new ArticleResource($this);
     }
 
 }
