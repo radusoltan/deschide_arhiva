@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "403132b21f470631720af08d93147ca5",
+    "content-hash": "4c4ae8f4ecd8fc99986ca49847cc2c3a",
     "packages": [
         {
             "name": "5balloons/laravel-smart-ads",
@@ -894,6 +894,50 @@
                 "source": "https://github.com/elastic/elasticsearch-php/tree/v8.15.0"
             },
             "time": "2024-08-14T14:32:50+00:00"
+        },
+        {
+            "name": "expertlead/webflow-php-sdk",
+            "version": "0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/expertlead/webflow-php-sdk.git",
+                "reference": "ead2a277cdbaaa0c79198255af6ad8d231cb63ee"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/expertlead/webflow-php-sdk/zipball/ead2a277cdbaaa0c79198255af6ad8d231cb63ee",
+                "reference": "ead2a277cdbaaa0c79198255af6ad8d231cb63ee",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5",
+                "squizlabs/php_codesniffer": "^3.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Webflow\\": "src/Webflow/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Oleksii Antypov",
+                    "email": "echo@wivern.co.uk"
+                }
+            ],
+            "description": "PHP SDK for the Webflow CMS API",
+            "support": {
+                "issues": "https://github.com/expertlead/webflow-php-sdk/issues",
+                "source": "https://github.com/expertlead/webflow-php-sdk/tree/0.1.1"
+            },
+            "time": "2019-09-12T21:28:54+00:00"
         },
         {
             "name": "fakerphp/faker",
