@@ -15,7 +15,6 @@ class ArticleResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
             'locale' => app()->getLocale(),
             'title' => $this->title,
             'category' => new CategoryResource($this->category),
