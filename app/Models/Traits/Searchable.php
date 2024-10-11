@@ -16,6 +16,10 @@ trait Searchable {
         return $this->id;
     }
 
+    public function getIndexId(){
+        return $this->index_id;
+    }
+
     abstract function toSearchArray();
 
 }

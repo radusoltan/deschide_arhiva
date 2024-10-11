@@ -8,6 +8,7 @@ use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ImageResource;
 use App\Models\Article;
 use Elastic\Elasticsearch\Client;
+use Elastic\Elasticsearch\Exception\ElasticsearchException;
 use Illuminate\Console\Command;
 
 class ReindexCommand extends Command
@@ -46,14 +47,31 @@ class ReindexCommand extends Command
             app()->setLocale($locale);
             foreach (Article::cursor() as $article){
 
-                $elasticArticle = $this->elasticsearch->index([
+                $params = [
                     'index' => $article->getSearchIndex(),
-                    'type' => $article->getSearchType(),
-                    'body' => $article->toSearchArray(),
-                ]);
-                $article->index_id = $elasticArticle->asObject()->_id;
-                $article->save();
-                $this->output->write('.');
+                    'id' => $article->index_id,
+                ];
+
+                if(!$article->getIndexId()) {
+                    $this->info('Article '.$article->getId().' Article not found or not indexed');
+
+                    $elasticArticle = $this->elasticsearch->index([
+                        'index' => $article->getSearchIndex(),
+                        'type' => $article->getSearchType(),
+                        'body' => $article->toSearchArray(),
+                    ]);
+                    $article->index_id = $elasticArticle->asObject()->_id;
+                    $article->save();
+                } else {
+                    try {
+                        $response = $this->elasticsearch->get($params);
+                        $this->info('Article '.$response->asObject()->_id.' Article indexed');
+                    } catch (\Exception $exception){
+                        dump($exception);
+                    }
+
+                }
+
             }
         }
 
