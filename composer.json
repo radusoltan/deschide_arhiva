@@ -12,6 +12,7 @@
         "elasticsearch/elasticsearch": "^8.15",
         "intervention/image": "^3.8",
         "intervention/image-laravel": "^1.3",
+        "jgrossi/corcel": "^8.0",
         "joelbutcher/facebook-graph-sdk": "^5.1",
         "laravel/framework": "^11.9",
         "laravel/sanctum": "^4.0",

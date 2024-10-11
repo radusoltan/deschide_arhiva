@@ -5,29 +5,50 @@ namespace App\Http\Controllers;
 use App\Models\Author;
 use App\Models\Category;
 
+use App\Services\ImageService;
+use Corcel\Model\Post;
+use Corcel\Model\Taxonomy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 class ImportController extends Controller
 {
+    private $imageService;
+
+    public function __construct(ImageService $imageService){
+        $this->imageService = $imageService;
+    }
+
     public function import(){
 
-        $typesUrl = 'http://arhiva.deschide.md/api/articles/157303.json';
+        $imageUrl = "http://arhiva.deschide.md/images/cms-image-000084911.jpg?itok=NKsPXH9H";
 
-        $response = Http::get($typesUrl);
+        $image = $this->imageService->uploadFromUrl($imageUrl, 'cms-image-000084911.jpg');
 
-        $dom = new \DomDocument();
+        dump($image);
 
-        @$dom->loadHTML($response->object()->fields->Continut);
+//        $posts = Post::published()->get();
+//
+//        $categories = Taxonomy::where('taxonomy', 'category')->get();
+//
+//        foreach($categories as $category) {
+//
+//            foreach ($category->posts as $post) {
+//                $author = $post->author;
+//
+//                $postDetails = [
+//                    'title' => $post->post_title,
+//                    'content' => $post->post_content,
+//                    'category' => $category->name,
+//                    'author' => $author ? $author->display_name : 'Unknown Author',
+//                ];
+//
+//                dump($postDetails);
+//
+//            }
+//
+//        }
 
-        $images = $dom->getElementsByTagName('img');
-        $imgTags = [];
-
-        foreach ($images as $img) {
-            $imgTags[] = $dom->saveHTML($img); // Salvează fiecare tag img ca string
-        }
-
-        dump($imgTags);
 
     }
 

@@ -14,7 +14,13 @@ class ImageService {
             ),
         );
 
-        $response = file_get_contents($url, false, stream_context_create($arrContextOptions));
+        $fallbackUrl = 'https://dummyimage.com/1200x630/4b5563/e5e5e5&text=No+image+';
+
+        $response = @file_get_contents($url, false, stream_context_create($arrContextOptions));
+
+        if(!$response) {
+            $response = file_get_contents($fallbackUrl, false, stream_context_create($arrContextOptions));
+        }
 
         $img = ImageManager::read($response);
 
@@ -31,6 +37,5 @@ class ImageService {
             ]);
         }
         return $image;
-
     }
 }
