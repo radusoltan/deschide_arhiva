@@ -48,10 +48,10 @@ class ImportService {
         $localAuthor = Author::where('old_number', $author->object()->id)->first();
         if(!$localAuthor) {
             $localAuthor = Author::create([
-                'first_name' => $author->object()->firstName === "Petru" && app()->getLocale() === 'ru' ? 'Петру' : 'Petru',
-                "last_name" => $author->object()->lastName === "Bogatu" && app()->getLocale() === 'ru' ? "Богату" : "Bogatu",
-                "full_name" => $author->object()->firstName . ' ' . $author->object()->lastName,
-                'slug' => Str::slug($author->object()->firstName . ' ' . $author->object()->lastName),
+                'first_name' => $author->object()->firstName,
+                "last_name" => $author->object()->lastName,
+                "full_name" => $author->object()->firstName,
+                'slug' => app()->getLocale() === 'ru' && $localAuthor->id === 14 ? Str::slug($author->object()->firstName . ' ' . $author->object()->lastName).'-'.Str::random(2) : Str::slug($author->object()->firstName . ' ' . $author->object()->lastName),
                 'old_number' => $author->object()->id,
             ]);
         } else {
