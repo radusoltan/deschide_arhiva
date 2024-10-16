@@ -37,7 +37,7 @@ class ArticlesTableSeeder extends Seeder
                     'items_per_page' => 100,
                     'sort[published]' => 'desc',
                     'type' => 'stiri',
-                    'page' => 1
+                    'page' => 2
                 ])->timeout(360)->withOptions(['verify' => false])->accept('application/json')->get($articlesUrl);
 
                 if (property_exists($resp->object(), 'items')){

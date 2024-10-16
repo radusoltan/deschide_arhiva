@@ -22,7 +22,8 @@ class ArticleResource extends JsonResource
             'lead' => $this->lead,
             'body' => $this->body,
             'images' => ImageResource::collection($this->images),
-            'authors' => AuthorResource::collection($this->authors)
+            'authors' => AuthorResource::collection($this->authors),
+            'published' => $this->published_at
         ];
     }
 }

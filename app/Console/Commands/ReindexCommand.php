@@ -49,13 +49,13 @@ class ReindexCommand extends Command
 
                 $params = [
                     'index' => $article->getSearchIndex(),
-                    'id' => $article->index_id,
+                    'id' => $article->getIndexId(),
                 ];
 
 //                dump($article->title);
 
-//                if(!$article->getIndexId()) {
-                    $this->info('Article '.$article->getId().' Article not found or not indexed');
+                if(!$article->getIndexId()) {
+                    $this->info('Article ' . $article->getId() . ' Article not found or not indexed');
 
                     $elasticArticle = $this->elasticsearch->index([
                         'index' => $article->getSearchIndex(),
@@ -65,6 +65,7 @@ class ReindexCommand extends Command
                     $article->update([
                         'index_id' => $elasticArticle->asObject()->_id
                     ]);
+                }
 //                } else {
 //                    try {
 //                        $response = $this->elasticsearch->get($params);
