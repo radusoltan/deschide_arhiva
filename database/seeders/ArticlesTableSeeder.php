@@ -78,13 +78,23 @@ class ArticlesTableSeeder extends Seeder
                             ]);
                         }
 
+
+
                         $this->importService->getArticleAuthors($article, $locale);
                         $this->importService->getArticleImagesByNumber($article, $locale);
+
+                        // Article Main Image
+                        $articleBigImage = collect($item->renditions)->firstWhere('caption', 'articlebig');
+
+                        if ($articleBigImage && isset($articleBigImage->details->original->src)){
+                            $imageUrl = $articleBigImage->details->original->src;
+                            $imageName = basename($imageUrl);
+
+                            $this->importService->getArticleMainImage($article, explode('|',basename(urldecode(urldecode($imageName))))[1]);
+                        }
                     }
                 }
-
             }
-
         }
     }
 }

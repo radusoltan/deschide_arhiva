@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
 use App\Models\Author;
 use App\Models\Category;
 
@@ -9,7 +10,9 @@ use App\Services\ImageService;
 use Corcel\Model\Post;
 use Corcel\Model\Taxonomy;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class ImportController extends Controller
 {
@@ -21,33 +24,6 @@ class ImportController extends Controller
 
     public function import(){
 
-        $imageUrl = "http://arhiva.deschide.md/images/cms-image-000084911.jpg?itok=NKsPXH9H";
-
-        $image = $this->imageService->uploadFromUrl($imageUrl, 'cms-image-000084911.jpg');
-
-        dump($image);
-
-//        $posts = Post::published()->get();
-//
-//        $categories = Taxonomy::where('taxonomy', 'category')->get();
-//
-//        foreach($categories as $category) {
-//
-//            foreach ($category->posts as $post) {
-//                $author = $post->author;
-//
-//                $postDetails = [
-//                    'title' => $post->post_title,
-//                    'content' => $post->post_content,
-//                    'category' => $category->name,
-//                    'author' => $author ? $author->display_name : 'Unknown Author',
-//                ];
-//
-//                dump($postDetails);
-//
-//            }
-//
-//        }
 
 
     }

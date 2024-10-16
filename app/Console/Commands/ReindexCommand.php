@@ -45,14 +45,16 @@ class ReindexCommand extends Command
         $this->info('Indexing all articles to Elasticsearch. This might take a while...');
         foreach (config('translatable.locales') as $locale){
             app()->setLocale($locale);
-            foreach (Article::cursor() as $article){
+            foreach (Article::translatedIn(app()->getLocale())->get() as $article){
 
                 $params = [
                     'index' => $article->getSearchIndex(),
                     'id' => $article->index_id,
                 ];
 
-                if(!$article->getIndexId()) {
+//                dump($article->title);
+
+//                if(!$article->getIndexId()) {
                     $this->info('Article '.$article->getId().' Article not found or not indexed');
 
                     $elasticArticle = $this->elasticsearch->index([
@@ -60,17 +62,18 @@ class ReindexCommand extends Command
                         'type' => $article->getSearchType(),
                         'body' => $article->toSearchArray(),
                     ]);
-                    $article->index_id = $elasticArticle->asObject()->_id;
-                    $article->save();
-                } else {
-                    try {
-                        $response = $this->elasticsearch->get($params);
-                        $this->info('Article '.$response->asObject()->_id.' Article indexed');
-                    } catch (\Exception $exception){
-                        dump($exception);
-                    }
-
-                }
+                    $article->update([
+                        'index_id' => $elasticArticle->asObject()->_id
+                    ]);
+//                } else {
+//                    try {
+//                        $response = $this->elasticsearch->get($params);
+//                        $this->info('Article '.$response->asObject()->_id.' Article indexed');
+//                    } catch (\Exception $exception){
+//                        dump($exception);
+//                    }
+//
+//                }
 
             }
         }

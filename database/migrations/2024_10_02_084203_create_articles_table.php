@@ -20,7 +20,7 @@ return new class extends Migration
                 ->onUpdate('cascade');
             $table->string('share_id')->nullable();
             $table->integer('old_number')->nullable();
-            $table->string('index_id')->nullable();
+
             $table->boolean('is_video')->default(false);
             $table->softDeletes();
             $table->timestamps();

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\ArticleImage;
 use App\Models\Author;
+use App\Models\Image;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
@@ -30,6 +31,15 @@ class ImportService {
                 }
             }
         }
+    }
+
+    public function getArticleMainImage($article, $imageName){
+        $imageUrl = "http://arhiva.deschide.md/images/{$imageName}";
+        $image = $this->imageService->uploadFromUrl($imageUrl, $imageName);
+        $mainImage = ArticleImage::where('article_id',$article->id)
+            ->where('image_id',$image->id)->first();
+        $mainImage->setMain();
+
     }
 
     private function getAuthorByNumber($number){
@@ -81,13 +91,6 @@ class ImportService {
 
                 if (!$article->images->contains($image)) {
                     $article->images()->attach($image);
-                }
-
-                if ($article->images()->count() >= 1) {
-                    $image = $article->images()->first();
-                    $mainImage = ArticleImage::where('article_id',$article->id)
-                        ->where('image_id',$image->id)->first();
-                    $mainImage->setMain();
                 }
 
             }

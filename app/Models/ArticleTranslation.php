@@ -30,7 +30,8 @@ class ArticleTranslation extends Model
         'telegram_post',
         'telegram_embed',
         'keywords',
-        'facebook_post_id'
+        'facebook_post_id',
+        "index_id"
     ];
 
     public function article(){

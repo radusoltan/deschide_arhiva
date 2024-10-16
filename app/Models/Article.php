@@ -37,7 +37,8 @@ class Article extends Model implements TranslatableContract
         'embed',
         'telegram_post',
         'telegram_embed',
-        'keywords'
+        'keywords',
+        "index_id"
     ];
 
     protected $fillable = ['category_id','old_number', "is_video"];
