@@ -33,18 +33,21 @@ class AuthorTableSeeder extends Seeder
                 $url = 'http://arhiva.deschide.md/api/authors/'.$number.'.json';
 
                 $authorsResult = Http::get($url);
+                $archAuthor = $this->getAuthor($authorsResult->object()->id);
 
-                $author = Author::where('old_number', $authorsResult->object()->id)->first();
 
-                if (!$author){
-                    Author::create([
-                        'old_number' => $authorsResult->object()->id,
-                        'first_name' => $authorsResult->object()->firstName,
-                        'last_name' => $authorsResult->object()->lastName,
-                        'full_name' => $authorsResult->object()->firstName.' '.$authorsResult->object()->lastName,
-                        'slug' => Str::slug($authorsResult->object()->firstName . ' ' . $authorsResult->object()->lastName)
-                    ]);
-                }
+
+//                $author = Author::where('old_number', $authorsResult->object()->id)->first();
+//
+//                if (!$author){
+//                    Author::create([
+//                        'old_number' => $authorsResult->object()->id,
+//                        'first_name' => $authorsResult->object()->firstName,
+//                        'last_name' => $authorsResult->object()->lastName,
+//                        'full_name' => $authorsResult->object()->firstName.' '.$authorsResult->object()->lastName,
+//                        'slug' => Str::slug($authorsResult->object()->firstName . ' ' . $authorsResult->object()->lastName)
+//                    ]);
+//                }
 
             }
         }
@@ -63,6 +66,6 @@ class AuthorTableSeeder extends Seeder
     private function getAuthor($id){
         $url = 'http://arhiva.deschide.md/api/authors/'.$id.'.json';
         $response = Http::get($url);
-
+        return $response->object();
     }
 }
