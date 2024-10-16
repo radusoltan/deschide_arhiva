@@ -78,7 +78,7 @@ class ImportService {
             foreach ($articleImages->object()->items as $item){
 
                 $remoteImage = $this->getImageByNumber($item->id);
-
+                dump($remoteImage);
                 $imageUrl = "http://arhiva.deschide.md/images/{$remoteImage->basename}";
 
                 $image = $this->imageService->uploadFromUrl($imageUrl, $remoteImage->basename);
@@ -87,6 +87,7 @@ class ImportService {
                     'description' => property_exists($remoteImage, 'description') ? $remoteImage->description : "Poza simbol",
                     'source' => property_exists($remoteImage, 'photographer') ? $remoteImage->photographer : "deschide.md",
                     'author' => property_exists($remoteImage, 'photographer') ? $remoteImage->photographer : "deschide.md",
+                    'old_number' => $remoteImage->id
                 ]);
 
                 if (!$article->images->contains($image)) {

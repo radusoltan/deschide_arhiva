@@ -34,10 +34,10 @@ class ArticlesTableSeeder extends Seeder
                 $resp = Http::withQueryParameters([
                     'language' => $locale,
                     'section' => $category->old_number,
-                    'items_per_page' => 100,
+                    'items_per_page' => 1000,
                     'sort[published]' => 'desc',
                     'type' => 'stiri',
-                    'page' => 2
+                    'page' => 1
                 ])->timeout(360)->withOptions(['verify' => false])->accept('application/json')->get($articlesUrl);
 
                 if (property_exists($resp->object(), 'items')){
