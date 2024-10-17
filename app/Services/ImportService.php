@@ -18,7 +18,7 @@ class ImportService {
 
     public function getArticleAuthors($article, $locale){
 
-        $url = "http://arhiva.deschide.md/api/authors/article/{$article->old_number}/{$locale}.json";
+        $url = env('ARHIVA_URL')."/api/authors/article/{$article->old_number}/{$locale}.json";
 
         $resp = Http::get($url)->object();
 
@@ -34,7 +34,7 @@ class ImportService {
     }
 
     public function getArticleMainImage($article, $imageName){
-        $imageUrl = "http://arhiva.deschide.md/images/{$imageName}";
+        $imageUrl = env('ARHIVA_URL')."/images/{$imageName}";
         $image = $this->imageService->uploadFromUrl($imageUrl, $imageName);
         $mainImage = ArticleImage::where('article_id',$article->id)
             ->where('image_id',$image->id)->first();
@@ -43,7 +43,7 @@ class ImportService {
     }
 
     private function getAuthorByNumber($number){
-        $url = "http://arhiva.deschide.md/api/authors/{$number}.json";
+        $url = env('ARHIVA_URL')."/api/authors/{$number}.json";
         $author = Http::withOptions(['verify' => false])->get($url);
         $localAuthor = Author::where('old_number', $author->object()->id)->first();
         if(!$localAuthor) {
@@ -67,7 +67,7 @@ class ImportService {
     }
 
     public function getArticleImagesByNumber($article, $locale) {
-        $url = "http://arhiva.deschide.md/api/articles/{$article->old_number}/{$locale}/images.json";
+        $url = env('ARHIVA_URL')."/api/articles/{$article->old_number}/{$locale}/images.json";
         $articleImages = Http::withOptions(['verify' => false])
             ->withQueryParameters([
                 'items_per_page' => 100
@@ -78,8 +78,7 @@ class ImportService {
             foreach ($articleImages->object()->items as $item){
 
                 $remoteImage = $this->getImageByNumber($item->id);
-                dump($remoteImage);
-                $imageUrl = "http://arhiva.deschide.md/images/{$remoteImage->basename}";
+                $imageUrl = env('ARHIVA_URL')."/images/{$remoteImage->basename}";
 
                 $image = $this->imageService->uploadFromUrl($imageUrl, $remoteImage->basename);
 
@@ -101,7 +100,7 @@ class ImportService {
 
     private function getImageByNumber($number){
 
-        $url = "http://arhiva.deschide.md/api/images/{$number}.json";
+        $url = env('ARHIVA_URL')."/api/images/{$number}.json";
         $image = Http::withOptions(['verify' => false])->get($url);
         return $image->object();
 

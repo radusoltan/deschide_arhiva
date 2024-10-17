@@ -29,7 +29,7 @@ class ArticlesTableSeeder extends Seeder
         foreach (config('translatable.locales') as $locale){
             app()->setLocale($locale);
             foreach (Category::all() as $category){
-                $articlesUrl = "http://arhiva.deschide.md/api/articles.json";
+                $articlesUrl = env('ARHIVA_URL')."/api/articles.json";
 
                 $resp = Http::withQueryParameters([
                     'language' => $locale,
@@ -37,7 +37,7 @@ class ArticlesTableSeeder extends Seeder
                     'items_per_page' => 1000,
                     'sort[published]' => 'desc',
                     'type' => 'stiri',
-                    'page' => 1
+                    'page' => 2
                 ])->timeout(360)->withOptions(['verify' => false])->accept('application/json')->get($articlesUrl);
 
                 if (property_exists($resp->object(), 'items')){
