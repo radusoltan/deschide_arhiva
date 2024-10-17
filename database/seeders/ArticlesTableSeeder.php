@@ -74,10 +74,10 @@ class ArticlesTableSeeder extends Seeder
 
                                 $this->importService->getArticleMainImage($article, explode('|',basename(urldecode(urldecode($imageName))))[1]);
                             }
-                            Log::info('Article '.$article->title.' with image '.$imageName.' added!');
+                            dump('Article '.$article->title.' with image '.$imageName.' added!');
 
                         } else {
-                            Log::info('Article '.$article->title.' with image '.$imageName.' exists!');
+                            dump('Article '.$article->title.' with image '.$imageName.' exists!');
                         }
 
 
