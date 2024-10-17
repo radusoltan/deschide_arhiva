@@ -24,7 +24,9 @@ class ImportController extends Controller
 
     public function import(){
 
-
+        return response()->json(
+            app()->version()
+        );
 
     }
 
