@@ -76,6 +76,8 @@ class ArticlesTableSeeder extends Seeder
                             }
                             Log::info('Article '.$article->title.' with image '.$imageName.' added!');
 
+                        } else {
+                            Log::info('Article '.$article->title.' with image '.$imageName.' exists!');
                         }
 
 
