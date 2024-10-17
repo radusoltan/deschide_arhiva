@@ -61,21 +61,24 @@ class ArticlesTableSeeder extends Seeder
                                 'is_live' => false,
                                 'embed' => $item->fields->Embed ?? null,
                             ]);
+
+                            $this->importService->getArticleAuthors($article, $locale);
+                            $this->importService->getArticleImagesByNumber($article, $locale);
+
+                            // Article Main Image
+                            $articleBigImage = collect($item->renditions)->firstWhere('caption', 'articlebig');
+
+                            if ($articleBigImage && isset($articleBigImage->details->original->src)){
+                                $imageUrl = $articleBigImage->details->original->src;
+                                $imageName = basename($imageUrl);
+
+                                $this->importService->getArticleMainImage($article, explode('|',basename(urldecode(urldecode($imageName))))[1]);
+                            }
+                            Log::info('Article '.$article->title.' with image '.$imageName.' added!');
+
                         }
 
-                        $this->importService->getArticleAuthors($article, $locale);
-                        $this->importService->getArticleImagesByNumber($article, $locale);
 
-                        // Article Main Image
-                        $articleBigImage = collect($item->renditions)->firstWhere('caption', 'articlebig');
-
-                        if ($articleBigImage && isset($articleBigImage->details->original->src)){
-                            $imageUrl = $articleBigImage->details->original->src;
-                            $imageName = basename($imageUrl);
-
-                            $this->importService->getArticleMainImage($article, explode('|',basename(urldecode(urldecode($imageName))))[1]);
-                        }
-                        Log::info('Article '.$article->title.' with image '.$imageName.' added!');
                     }
                 }
             }
