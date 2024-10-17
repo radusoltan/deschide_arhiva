@@ -11,6 +11,7 @@ use App\Services\ImportService;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class ArticlesTableSeeder extends Seeder
@@ -60,25 +61,7 @@ class ArticlesTableSeeder extends Seeder
                                 'is_live' => false,
                                 'embed' => $item->fields->Embed ?? null,
                             ]);
-                        } else {
-                            $article->update([
-                                'old_number' => $item->number,
-                                'category_id' => $category->id,
-                                'title' => $item->title,
-                                'slug' => $category->id != 11 ? Str::slug($item->title) : Str::slug($item->number.'-'.Str::random(10)),
-                                'lead' => $item->fields->lead ?? null,
-                                'body' => $item->fields->Continut ?? null,
-                                'published_at' => Carbon::parse($item->published),
-                                'status' => $item->status === 'Y'? "P": "S",
-                                'is_flash' => false,
-                                'is_breaking' => false,
-                                'is_alert' => false,
-                                'is_live' => false,
-                                'embed' => $item->fields->Embed ?? null,
-                            ]);
                         }
-
-
 
                         $this->importService->getArticleAuthors($article, $locale);
                         $this->importService->getArticleImagesByNumber($article, $locale);
@@ -92,6 +75,7 @@ class ArticlesTableSeeder extends Seeder
 
                             $this->importService->getArticleMainImage($article, explode('|',basename(urldecode(urldecode($imageName))))[1]);
                         }
+                        Log::info('Article '.$article->title.' with image '.$imageName.' added!');
                     }
                 }
             }
