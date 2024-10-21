@@ -7,6 +7,7 @@ use Elastic\Elasticsearch\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class CheckTranslations extends Command
@@ -61,9 +62,10 @@ class CheckTranslations extends Command
                                 'is_live' => false,
                                 'embed' => $translatedOld->object()->fields->Embed ?? null,
                             ]);
-                            $this->info('Article: '.$article->id. 'translated in '.$language);
+                            $this->info('Article: '.$article->id. ' translated in '.$language);
                         }
                     }
+                    Log::info('Article: '.$article->id. ' checked');
                 }
             }
         }
