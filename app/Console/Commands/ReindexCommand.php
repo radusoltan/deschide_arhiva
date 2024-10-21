@@ -2,13 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Resources\ArticleResource;
-use App\Http\Resources\AuthorResource;
-use App\Http\Resources\CategoryResource;
-use App\Http\Resources\ImageResource;
 use App\Models\Article;
 use Elastic\Elasticsearch\Client;
-use Elastic\Elasticsearch\Exception\ElasticsearchException;
 use Illuminate\Console\Command;
 
 class ReindexCommand extends Command
@@ -52,9 +47,8 @@ class ReindexCommand extends Command
                     'id' => $article->getIndexId(),
                 ];
 
-//                dump($article->title);
 
-                if(!$article->getIndexId()) {
+                if(!$article->getIndexId() && $article->status === "P") {
                     $this->info('Article ' . $article->getId() . ' Article not found or not indexed');
 
                     $elasticArticle = $this->elasticsearch->index([
@@ -66,16 +60,6 @@ class ReindexCommand extends Command
                         'index_id' => $elasticArticle->asObject()->_id
                     ]);
                 }
-//                } else {
-//                    try {
-//                        $response = $this->elasticsearch->get($params);
-//                        $this->info('Article '.$response->asObject()->_id.' Article indexed');
-//                    } catch (\Exception $exception){
-//                        dump($exception);
-//                    }
-//
-//                }
-
             }
         }
 

@@ -15,7 +15,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             CategoryTableSeeder::class,
-            ArticlesTableSeeder::class,
+            NewArticlesTableSeeder::class
+//            ArticlesTableSeeder::class,
 //            WPArticlesSeeder::class
         ]);
     }

@@ -5,7 +5,9 @@ namespace App\Services;
 use App\Models\ArticleImage;
 use App\Models\Author;
 use App\Models\Image;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class ImportService {
@@ -42,6 +44,35 @@ class ImportService {
 
     }
 
+    public function getArticleTranslations($article, $locale) {
+        $oldArticleResponse = Http::get(env('ARHIVA_URL') . '/api/articles/' . $article->old_number . 'json?language=' . $locale);
+        if(array_key_exists('translations',$oldArticleResponse->json())) {
+            foreach ($oldArticleResponse->json()['translations'] as $language => $url){
+                app()->setLocale($language);
+
+                if(!$article->hasTranslation($language)) {
+
+                    $translatedOld = Http::get(env('ARHIVA_URL') . '/api/articles/' . $article->old_number . 'json?language=' . app()->getLocale());
+
+                    $article->update([
+                        'title' => $translatedOld->object()->title,
+                        'slug' => Str::slug($translatedOld->object()->title).'-'.Str::random(10),
+                        'lead' => $translatedOld->object()->fields->lead ?? null,
+                        'body' => $translatedOld->object()->fields->Continut ?? null,
+                        'published_at' => $translatedOld->object()->status !== 'Y' ? Carbon::now() : Carbon::parse($translatedOld->object()->published),
+                        'status' => $translatedOld->object()->status === 'Y'? "P": "S",
+                        'is_flash' => false,
+                        'is_breaking' => false,
+                        'is_alert' => false,
+                        'is_live' => false,
+                        'embed' => $translatedOld->object()->fields->Embed ?? null,
+                    ]);
+                    Log::info('Article '.$article->id.' translated in '.app()->getLocale());
+                }
+            }
+        }
+    }
+
     private function getAuthorByNumber($number){
         $url = env('ARHIVA_URL')."/api/authors/{$number}.json";
         $author = Http::withOptions(['verify' => false])->get($url);
@@ -70,7 +101,7 @@ class ImportService {
         $url = env('ARHIVA_URL')."/api/articles/{$article->old_number}/{$locale}/images.json";
         $articleImages = Http::withOptions(['verify' => false])
             ->withQueryParameters([
-                'items_per_page' => 100
+                'items_per_page' => 100,
             ])
             ->get($url);
 
@@ -86,7 +117,7 @@ class ImportService {
                     'description' => property_exists($remoteImage, 'description') ? $remoteImage->description : "Poza simbol",
                     'source' => property_exists($remoteImage, 'photographer') ? $remoteImage->photographer : "deschide.md",
                     'author' => property_exists($remoteImage, 'photographer') ? $remoteImage->photographer : "deschide.md",
-                    'old_number' => $remoteImage->id
+                    'old_number' => $remoteImage->id,
                 ]);
 
                 if (!$article->images->contains($image)) {
