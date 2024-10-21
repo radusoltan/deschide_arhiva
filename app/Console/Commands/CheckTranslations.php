@@ -63,7 +63,7 @@ class CheckTranslations extends Command
                             ]);
                             $this->info('Article: '.$article->id. 'translated in '.$language);
                         } else {
-                            $this->info('Article: '.$article->id. 'already translated in '.$language);
+                            $this->info('Article: '.$article->id. ' already translated in '.$language);
                         }
                     }
                 }
