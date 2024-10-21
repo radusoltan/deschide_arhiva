@@ -62,8 +62,6 @@ class CheckTranslations extends Command
                                 'embed' => $translatedOld->object()->fields->Embed ?? null,
                             ]);
                             $this->info('Article: '.$article->id. 'translated in '.$language);
-                        } else {
-                            $this->info('Article: '.$article->id. ' already translated in '.$language);
                         }
                     }
                 }
