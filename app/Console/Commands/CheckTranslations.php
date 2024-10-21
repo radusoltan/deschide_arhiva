@@ -43,33 +43,36 @@ class CheckTranslations extends Command
         foreach (config('translatable.locales') as $locale) {
             app()->setLocale($locale);
             foreach (Article::cursor() as $article) {
-                $oldArticleResponse = Http::get(env('ARHIVA_URL') . '/api/articles/' . $article->old_number . 'json?language=' . app()->getLocale());
-                if(array_key_exists('translations',$oldArticleResponse->json())) {
-                    foreach ($oldArticleResponse->json()['translations'] as $language => $url){
-                        if(!$article->hasTranslation($language) && !$article->checked) {
-                            $translatedOld = Http::get(env('ARHIVA_URL') . '/api/articles/' . $article->old_number . 'json?language=' . $language);
-                            app()->setLocale($language);
-                            $article->update([
-                                'title' => $translatedOld->object()->title,
-                                'slug' => Str::slug($translatedOld->object()->title).'-'.Str::random(10),
-                                'lead' => $translatedOld->object()->fields->lead ?? null,
-                                'body' => $translatedOld->object()->fields->Continut ?? null,
-                                'published_at' => $translatedOld->object()->status !== 'Y' ? Carbon::now() : Carbon::parse($translatedOld->object()->published),
-                                'status' => $translatedOld->object()->status === 'Y'? "P": "S",
-                                'is_flash' => false,
-                                'is_breaking' => false,
-                                'is_alert' => false,
-                                'is_live' => false,
-                                'embed' => $translatedOld->object()->fields->Embed ?? null,
-                            ]);
-                            $this->info('Article: '.$article->id. ' translated in '.$language);
+                if (!$article->checked){
+                    $oldArticleResponse = Http::get(env('ARHIVA_URL') . '/api/articles/' . $article->old_number . 'json?language=' . app()->getLocale());
+                    if(array_key_exists('translations',$oldArticleResponse->json())) {
+                        foreach ($oldArticleResponse->json()['translations'] as $language => $url){
+                            if(!$article->hasTranslation($language)) {
+                                $translatedOld = Http::get(env('ARHIVA_URL') . '/api/articles/' . $article->old_number . 'json?language=' . $language);
+                                app()->setLocale($language);
+                                $article->update([
+                                    'title' => $translatedOld->object()->title,
+                                    'slug' => Str::slug($translatedOld->object()->title).'-'.Str::random(10),
+                                    'lead' => $translatedOld->object()->fields->lead ?? null,
+                                    'body' => $translatedOld->object()->fields->Continut ?? null,
+                                    'published_at' => $translatedOld->object()->status !== 'Y' ? Carbon::now() : Carbon::parse($translatedOld->object()->published),
+                                    'status' => $translatedOld->object()->status === 'Y'? "P": "S",
+                                    'is_flash' => false,
+                                    'is_breaking' => false,
+                                    'is_alert' => false,
+                                    'is_live' => false,
+                                    'embed' => $translatedOld->object()->fields->Embed ?? null,
+                                ]);
+                                $this->info('Article: '.$article->id. ' translated in '.$language);
+                            }
                         }
+                        $article->update([
+                            'checked' => true
+                        ]);
+                        Log::info('Article: '.$article->id. ' checked');
                     }
-                    $article->update([
-                        'checked' => true
-                    ]);
-                    Log::info('Article: '.$article->id. ' checked');
                 }
+
             }
         }
         $this->info('Done!');
