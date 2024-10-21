@@ -53,7 +53,7 @@ class CheckTranslations extends Command
                                 'slug' => Str::slug($translatedOld->object()->title).'-'.Str::random(10),
                                 'lead' => $translatedOld->object()->fields->lead ?? null,
                                 'body' => $translatedOld->object()->fields->Continut ?? null,
-                                'published_at' => Carbon::parse($translatedOld->object()->published),
+                                'published_at' => $translatedOld->object()->status !== 'Y' ? Carbon::now() : Carbon::parse($translatedOld->object()->published),
                                 'status' => $translatedOld->object()->status === 'Y'? "P": "S",
                                 'is_flash' => false,
                                 'is_breaking' => false,
