@@ -72,7 +72,7 @@ class CheckTranslations extends Command
                         Log::info('Article: '.$article->id. ' checked');
                     }
                 } else {
-                    Log::info('Article: '.$article->id,' checked');
+                    Log::info('Article: '.$article->id.' checked');
                 }
 
             }
