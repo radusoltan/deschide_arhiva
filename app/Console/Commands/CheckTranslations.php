@@ -42,7 +42,7 @@ class CheckTranslations extends Command
 
         foreach (config('translatable.locales') as $locale) {
             app()->setLocale($locale);
-            foreach (Article::cursor() as $article) {
+            foreach (Article::where('checked', false)->get() as $article) {
                 if (!$article->checked){
                     $oldArticleResponse = Http::get(env('ARHIVA_URL') . '/api/articles/' . $article->old_number . 'json?language=' . app()->getLocale());
                     if(array_key_exists('translations',$oldArticleResponse->json())) {
