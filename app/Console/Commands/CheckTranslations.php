@@ -46,7 +46,7 @@ class CheckTranslations extends Command
                 $oldArticleResponse = Http::get(env('ARHIVA_URL') . '/api/articles/' . $article->old_number . 'json?language=' . app()->getLocale());
                 if(array_key_exists('translations',$oldArticleResponse->json())) {
                     foreach ($oldArticleResponse->json()['translations'] as $language => $url){
-                        if(!$article->hasTranslation($language)) {
+                        if(!$article->hasTranslation($language) && !$article->checked) {
                             $translatedOld = Http::get(env('ARHIVA_URL') . '/api/articles/' . $article->old_number . 'json?language=' . $language);
                             app()->setLocale($language);
                             $article->update([
@@ -65,6 +65,9 @@ class CheckTranslations extends Command
                             $this->info('Article: '.$article->id. ' translated in '.$language);
                         }
                     }
+                    $article->update([
+                        'checked' => true
+                    ]);
                     Log::info('Article: '.$article->id. ' checked');
                 }
             }
