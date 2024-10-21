@@ -41,7 +41,7 @@ class Article extends Model implements TranslatableContract
         "index_id"
     ];
 
-    protected $fillable = ['category_id','old_number', "is_video"];
+    protected $fillable = ['category_id','old_number', "is_video", 'checked'];
 
     protected $casts = [
         'is_flash' => 'boolean',
