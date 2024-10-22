@@ -83,6 +83,7 @@ class NewArticlesTableSeeder extends Seeder
 
                         }
                         $this->importService->getArticleTranslations($article, $locale);
+                        Log::info('Article '.$article->id.' checked '.strtoupper($locale));
 
                     }
                 }
