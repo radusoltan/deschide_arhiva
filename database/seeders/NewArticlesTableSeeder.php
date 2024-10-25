@@ -33,10 +33,10 @@ class NewArticlesTableSeeder extends Seeder
                 $resp = Http::withQueryParameters([
                     'language' => $locale,
                     'section' => $category->old_number,
-                    'items_per_page' => 100,
+                    'items_per_page' => 400,
                     'sort[published]' => 'desc',
                     'type' => 'stiri',
-                    'page' => 1
+                    'page' => 58
                 ])
                     ->timeout(360)
                     ->withOptions([
