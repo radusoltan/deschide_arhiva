@@ -56,7 +56,7 @@ class SendToTG extends Command
 
         while ($newscount > 0){
 
-            $object = array_slice($items, 0, 5)[$newscount];
+            $object = array_slice($items, 0, 5)[$newscount-1];
 
             $tgPost = ArticleTelegramPost::where('article_title', $object->title)->first();
 
@@ -64,7 +64,7 @@ class SendToTG extends Command
 
                 if ($object->media_url){
                     $response = $this->telegram->sendPhoto([
-                        'chat_id' => '@deschide_test',
+                        'chat_id' => env('TELEGRAM_CHAT_ID'),
                         'caption' => "<b>{$object->title}</b>\n\n{$object->description}\n\n<a href=\"{$object->link}\">Citește mai mult</a>",
                         'photo' => InputFile::create($object->media_url),
                         'parse_mode' => 'HTML'
