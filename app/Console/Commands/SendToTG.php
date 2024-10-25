@@ -56,9 +56,11 @@ class SendToTG extends Command
 
         while ($newscount > 0){
 
-            $object = array_slice($items, 0, 5)[$newscount-1];
 
-            $tgPost = ArticleTelegramPost::where('article_title', $object->title)->first();
+
+            $object = $items[$newscount];
+
+            $tgPost = ArticleTelegramPost::where('article_title', $object->title)->exists();
 
             if (!$tgPost) {
 
@@ -81,6 +83,9 @@ class SendToTG extends Command
                     'article_title' => $object->title,
                     'telegram_message_id' => $response->messageId,
                 ]);
+                $this->info('Article '.$object->title.' created and sent to TG');
+            } else {
+                $this->info('Article '.$object->title.' already sent to TG');
             }
             $newscount--;
         }
