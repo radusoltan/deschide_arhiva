@@ -53,7 +53,7 @@ class SendToTG extends Command
         }
 
         // Trimite primele 5 articole
-        $newscount = 5;
+        $newscount = 10;
 
         while ($newscount > 0) {
             $object = $items[$newscount - 1]; // Ajustează indexul pentru a accesa corect elementele
