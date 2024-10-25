@@ -65,7 +65,7 @@ class SendToTG extends Command
                 // Trimite mesajul pe Telegram
                 $response = $this->telegram->sendPhoto([
                     'chat_id' => env('TELEGRAM_CHAT_ID'),
-                    'caption' => "{$object->description}\n\n<a href=\"{$object->link}\">Citește mai mult</a>",
+                    'caption' => "<b>{$object->title}</b>\n\n{$object->description}\n\n<a href=\"{$object->link}\">Citește mai mult</a>",
                     'photo' => InputFile::create($object->media_url),
                     'parse_mode' => 'HTML',
                 ]);
