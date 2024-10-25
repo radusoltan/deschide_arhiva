@@ -46,6 +46,7 @@ class NewArticlesTableSeeder extends Seeder
                     ->get($articleUrl);
 
                 if(property_exists($resp->object(),'items')){
+
                     foreach ($resp->object()->items as $oldArticle){
 
                         $article = Article::where('old_number', $oldArticle->number)->first();
