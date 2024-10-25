@@ -56,7 +56,7 @@ class SendToTG extends Command
 
         while ($newscount > 0){
 
-            $object = $items[$newscount];
+            $object = array_slice($items, 0, 5)[$newscount];
 
             $tgPost = ArticleTelegramPost::where('article_title', $object->title)->first();
 
