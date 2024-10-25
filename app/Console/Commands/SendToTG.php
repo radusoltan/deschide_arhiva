@@ -74,7 +74,7 @@ class SendToTG extends Command
                 } else {
 
                     $response = $this->telegram->sendMessage([
-                        'chat_id' => '@deschide_test',
+                        'chat_id' => env('TELEGRAM_CHAT_ID'),
                         'text' =>  "<b>{$object->title}</b>\n\n{$object->description}\n\n<a href=\"{$object->link}\">Citește mai mult</a>",
                         'parse_mode' => 'HTML'
                     ]);
