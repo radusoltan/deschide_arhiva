@@ -37,8 +37,8 @@ class SendToTG extends Command
     {
         $xml = simplexml_load_file('https://www.deschide.md/articole/rss.xml');
         $namespaces = $xml->getNamespaces(true);
-
         $items = [];
+
         foreach ($xml->channel->item as $item) {
             $tmp = new \stdClass();
             $tmp->title = trim((string) $item->title);
@@ -52,41 +52,31 @@ class SendToTG extends Command
             $items[] = $tmp;
         }
 
+        // Trimite primele 5 articole
         $newscount = 5;
 
-        while ($newscount > 0){
+        while ($newscount > 0) {
+            $object = $items[$newscount - 1]; // Ajustează indexul pentru a accesa corect elementele
 
+            // Verifică dacă articolul a fost deja postat
+            $existsOnTelegram = ArticleTelegramPost::where('article_title', $object->title)->exists();
 
+            if (!$existsOnTelegram) {
+                // Trimite mesajul pe Telegram
+                $response = $this->telegram->sendPhoto([
+                    'chat_id' => env('TELEGRAM_CHAT_ID'),
+                    'caption' => "{$object->description}\n\n<a href=\"{$object->link}\">Citește mai mult</a>",
+                    'photo' => InputFile::create($object->media_url),
+                    'parse_mode' => 'HTML',
+                ]);
 
-            $object = $items[$newscount];
-
-            $tgPost = ArticleTelegramPost::where('article_title', $object->title)->exists();
-
-            if (!$tgPost) {
-
-                if ($object->media_url){
-                    $response = $this->telegram->sendPhoto([
-                        'chat_id' => env('TELEGRAM_CHAT_ID'),
-                        'caption' => "<b>{$object->title}</b>\n\n{$object->description}\n\n<a href=\"{$object->link}\">Citește mai mult</a>",
-                        'photo' => InputFile::create($object->media_url),
-                        'parse_mode' => 'HTML'
-                    ]);
-                } else {
-
-                    $response = $this->telegram->sendMessage([
-                        'chat_id' => env('TELEGRAM_CHAT_ID'),
-                        'text' =>  "<b>{$object->title}</b>\n\n{$object->description}\n\n<a href=\"{$object->link}\">Citește mai mult</a>",
-                        'parse_mode' => 'HTML'
-                    ]);
-                }
+                // Salvează ID-ul mesajului în baza de date
                 ArticleTelegramPost::create([
                     'article_title' => $object->title,
-                    'telegram_message_id' => $response->messageId,
+                    'telegram_message_id' => $response->getMessageId()
                 ]);
-                $this->info('Article '.$object->title.' created and sent to TG');
-            } else {
-                $this->info('Article '.$object->title.' already sent to TG');
             }
+
             $newscount--;
         }
     }
