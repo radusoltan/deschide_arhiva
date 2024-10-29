@@ -8,6 +8,14 @@ use App\Http\Controllers\FacebookController;
 Route::get('/', [\App\Http\Controllers\ImportController::class, 'import']);
 
 //Route::get('/', [\App\Http\Controllers\ImportController::class. 'import']);
+
+
+//Public live text
+Route::get('live-text', function (){
+    return \App\Models\LiveText::find(2)->load('records');
+});
+
+
 Route::get('/export-csv', [\App\Http\Controllers\ExportController::class, 'exportCSV'])->middleware('set_locale');
 Route::get('yt-import', [\App\Http\Controllers\ExportController::class, 'importYT']);
 
