@@ -18,17 +18,17 @@ class LiveTextRecordController extends Controller
     // Creează un nou LiveTextRecord pentru un LiveText specific
     public function store(Request $request, LiveText $livetext)
     {
-        $validatedData = $request->validate([
-            'content' => 'string',
-            'tg_embed' => 'string',
-            'title' => 'string',
-        ]);
+//        $validatedData = $request->validate([
+//            'content' => 'string',
+////            'tg_embed' => 'string',
+////            'title' => 'string',
+//        ]);
 
         $record = $livetext->records()->create([
 //            'live_text_id' => $livetext->id,
-            'title' => $validatedData['title'],
-            'content' => $validatedData['content'],
-            'tg_embed' => $validatedData['tg_embed'] ?? null,
+            'title' => $request->get('title'),
+            'content' => $request->get('content'),
+            'tg_embed' => $request->get('tg_embed') ?? null,
             'published_at' => now(),
         ]);
         return response()->json($record);

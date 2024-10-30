@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Models\LiveText;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FacebookController;
@@ -12,7 +13,9 @@ Route::get('/', [\App\Http\Controllers\ImportController::class, 'import']);
 
 //Public live text
 Route::get('live-text', function (){
-    return \App\Models\LiveText::find(2)->load('records');
+    return LiveText::find(2)->load(['records' => function ($query) {
+        $query->orderBy('published_at', 'desc');
+    }]);
 });
 
 
