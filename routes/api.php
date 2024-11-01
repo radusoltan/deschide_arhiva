@@ -13,6 +13,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::get('articles', [ArticleController::class, 'index'])->middleware(['set_locale']);
+Route::get('article/{old_number}',[ArticleController::class, 'show'])->middleware(['set_locale']);
 Route::get('categories', [CategoryController::class, 'index'])->middleware(['set_locale']);
 Route::get('categories/{slug}', [CategoryController::class, 'show'])->middleware(['set_locale']);
 Route::get('categories/{slug}/articles',[CategoryController::class, 'getCategoryArticles'])->middleware('set_locale');
@@ -31,3 +32,5 @@ Route::group(['middleware' => ['auth:sanctum','set_locale'], 'prefix' => 'admin'
     Route::post('upload-image', [ImageController::class, 'store']);
 
 });
+
+Route::post('import-image', [ImageController::class, 'importImage']);
