@@ -75,18 +75,18 @@ class SendToTG extends Command
 
             if (!$existsOnTelegram) {
 
-                $link = [
-                    'link' => $object->link,
-                    'message' => $object->title,
-                    'picture' => $object->media_url
-                ];
-
-                try {
-                    $response = $fb->post('/me/feed', $link, $pageAccessToken);
-                    dump($response);
-                } catch (FacebookResponseException $exception){
-                    dump($exception->getMessage());
-                }
+//                $link = [
+//                    'link' => $object->link,
+//                    'message' => $object->title,
+//                    'picture' => $object->media_url
+//                ];
+//
+//                try {
+//                    $response = $fb->post('/me/feed', $link, $pageAccessToken);
+//                    dump($response);
+//                } catch (FacebookResponseException $exception){
+//                    dump($exception->getMessage());
+//                }
 
 
                 // Trimite mesajul pe Telegram
