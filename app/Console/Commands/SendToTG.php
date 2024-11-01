@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Models\ArticleTelegramPost;
+use Facebook\Exceptions\FacebookResponseException;
+use Facebook\Facebook;
 use Illuminate\Console\Command;
 use Telegram\Bot\Api;
 use Telegram\Bot\FileUpload\InputFile;
@@ -35,6 +37,16 @@ class SendToTG extends Command
      */
     public function handle()
     {
+
+        $pageAccessToken = 'EAAFOZAm5DHSYBO7dCZA0sUmjPKKq2kpvMi4EVyzMiV2EefvMWXpXpwIck9OmLr8VzJZB6b68jKnBdZCUZBJKFl0NPxAOk9vIY2qd8XArhMVclOHWQSazsvsk7NaZAU4j9wstZA2doWXyuHD41a95hLR7ANy4fEBy2mcBOhfqEqTSMiZAIlGxChSuuPN2grmBa8MeviezXmRWDSNyzAZDZD';
+
+        $fb = new Facebook([
+            'app_id' => '367676820233510',
+            'app_secret' => '63d933d6ec13eb1548f04e6a7d9dcf55',
+            'default_graph_version' => 'v21.0',
+        ]);
+
+
         $xml = simplexml_load_file('https://www.deschide.md/articole/rss.xml');
         $namespaces = $xml->getNamespaces(true);
         $items = [];
@@ -62,6 +74,21 @@ class SendToTG extends Command
             $existsOnTelegram = ArticleTelegramPost::where('article_title', $object->title)->exists();
 
             if (!$existsOnTelegram) {
+
+                $link = [
+                    'link' => $object->link,
+                    'message' => $object->description,
+                    'picture' => $object->media_url
+                ];
+
+                try {
+                    $response = $fb->post('/me/feed', $link, $pageAccessToken);
+                    dump($response);
+                } catch (FacebookResponseException $exception){
+                    dump($exception->getMessage());
+                }
+
+
                 // Trimite mesajul pe Telegram
                 $response = $this->telegram->sendPhoto([
                     'chat_id' => env('TELEGRAM_CHAT_ID'),
