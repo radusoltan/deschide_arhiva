@@ -77,7 +77,7 @@ class SendToTG extends Command
 
                 $link = [
                     'link' => $object->link,
-                    'message' => $object->description,
+                    'message' => $object->title,
                     'picture' => $object->media_url
                 ];
 
