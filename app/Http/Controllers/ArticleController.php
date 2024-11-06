@@ -14,7 +14,11 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        return ArticleResource::collection(Article::translatedIn(app()->getLocale())->get());
+        return ArticleResource::collection(
+            Article::translatedIn(app()->getLocale())
+                ->orderBy('article_translations.published_at', 'desc')
+                ->paginate()
+        );
     }
 
     public function getArticles(Category $category) {
@@ -42,9 +46,14 @@ class ArticleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Article $article)
+    public function show($old_number)
     {
-        //
+
+        $articles = Article::translatedIn(app()->getLocale())->paginate();
+
+        $articleObj = Article::orderBy('old_number','desc')->first();
+        dd($articleObj);
+//        return $articleObj;
     }
 
     /**

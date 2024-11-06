@@ -8,7 +8,6 @@ use App\Http\Controllers\FacebookController;
 
 Route::get('/', [\App\Http\Controllers\ImportController::class, 'import']);
 
-//Route::get('/', [\App\Http\Controllers\ImportController::class. 'import']);
 
 
 //Public live text
@@ -27,7 +26,8 @@ Route::get('get_img',[\App\Http\Controllers\ImageController::class,'getImgSrc'])
 
 Route::get('articles', [ArticleController::class, 'index'])->middleware('set_locale');
 
-Route::get('auth/facebook',[FacebookController::class,'fbPage']);
-Route::get('auth/facebook/callback',[FacebookController::class,'fbCallback']);
-
+Route::prefix('facebook')->name('facebook.')->group( function(){
+    Route::get('auth', [FaceBookController::class, 'loginUsingFacebook'])->name('login');
+    Route::get('callback', [FaceBookController::class, 'callbackFromFacebook'])->name('callback');
+});
 require __DIR__.'/auth.php';

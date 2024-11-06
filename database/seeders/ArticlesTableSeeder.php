@@ -3,15 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\Article;
-use App\Models\ArticleImage;
-use App\Models\Author;
 use App\Models\Category;
-use App\Services\ImageService;
 use App\Services\ImportService;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class ArticlesTableSeeder extends Seeder
@@ -35,10 +31,10 @@ class ArticlesTableSeeder extends Seeder
                 $resp = Http::withQueryParameters([
                     'language' => $locale,
                     'section' => $category->old_number,
-                    'items_per_page' => 1000,
+                    'items_per_page' => 100,
                     'sort[published]' => 'desc',
                     'type' => 'stiri',
-                    'page' => 2
+                    'page' => 1
                 ])->timeout(360)->withOptions(['verify' => false])->accept('application/json')->get($articlesUrl);
 
                 if (property_exists($resp->object(), 'items')){

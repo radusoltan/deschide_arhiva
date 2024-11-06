@@ -72,21 +72,7 @@ class SendToTG extends Command
 
             // Verifică dacă articolul a fost deja postat
             $existsOnTelegram = ArticleTelegramPost::where('article_title', $object->title)->exists();
-
             if (!$existsOnTelegram) {
-
-//                $link = [
-//                    'link' => $object->link,
-//                    'message' => $object->title,
-//                    'picture' => $object->media_url
-//                ];
-//
-//                try {
-//                    $response = $fb->post('/me/feed', $link, $pageAccessToken);
-//                    dump($response);
-//                } catch (FacebookResponseException $exception){
-//                    dump($exception->getMessage());
-//                }
 
 
                 // Trimite mesajul pe Telegram

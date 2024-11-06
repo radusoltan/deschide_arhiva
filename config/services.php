@@ -39,10 +39,14 @@ return [
         'hosts' => explode(',', env('ELASTIC_HOSTS')),
     ],
     'facebook' => [
-        'client_id' => env('FACEBOOK_APP_ID'),
-        'client_secret' => env('FACEBOOK_APP_SECRET'),
-        'redirect' => 'http://localhost:8000/auth/facebook/callback',
-        'default_access_token' => env('FACEBOOK_ACCESS_TOKEN'),
+        'client_id' => '1211926165592268',
+        'client_secret' => 'a355b3d57dcf392d8527d9ee5eacea7a',
+        'redirect' => 'http://localhost:8000/facebook/callback',
+        'default_access_token' => 'EAAROPYyYGMwBOZC0WXzldt0JVoYXdu8QEO48bKoMaveZBWSR8SkbLRQ5VD0x9ZCtIAHA12nrEDM94kvIpQB8UkfOEJ7VxSoWDblqQZCm9vunOzFKQuRurR7quy1L4QNL0UDNVE6Iw4JG5uYonDgJuyX4GKNcfglSLoSZBn2tlHi2O4CsHqI6bZAJhzY9DosamFdhssZAK2U6pUVdyGtd8XExA74Wdo0ZBOIZD',
+    ],
+    'facebook_poster' => [
+        'page_id' => '507699295948485',
+        'access_token' => 'EAAFOZAm5DHSYBO7dCZA0sUmjPKKq2kpvMi4EVyzMiV2EefvMWXpXpwIck9OmLr8VzJZB6b68jKnBdZCUZBJKFl0NPxAOk9vIY2qd8XArhMVclOHWQSazsvsk7NaZAU4j9wstZA2doWXyuHD41a95hLR7ANy4fEBy2mcBOhfqEqTSMiZAIlGxChSuuPN2grmBa8MeviezXmRWDSNyzAZDZD',
     ]
 
 ];

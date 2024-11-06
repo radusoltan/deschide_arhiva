@@ -17,6 +17,7 @@
         "irazasyed/telegram-bot-sdk": "^3.14",
         "jgrossi/corcel": "^8.0",
         "joelbutcher/facebook-graph-sdk": "^5.1",
+        "laravel-notification-channels/facebook-poster": "^6.1",
         "laravel/framework": "^11.9",
         "laravel/sanctum": "^4.0",
         "laravel/scout": "^10.11",

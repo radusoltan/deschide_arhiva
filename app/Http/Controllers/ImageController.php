@@ -91,31 +91,17 @@ class ImageController extends Controller
 
     public function importImage(Request $request){
 
-        $arrContextOptions=array(
-            "ssl"=>array(
-                "verify_peer"=>false,
-                "verify_peer_name"=>false,
-            ),
-        );
+        if ($request->hasFile('image')) {
 
-        $imageUrl = env('ARHIVA_URL')."/images/{$request->image}";
+            $file = $request->file('image');
 
-        try {
-            $response = @file_get_contents($imageUrl, false, stream_context_create($arrContextOptions));
-            $img = ImageManager::read($response);
-            $destinationPath = storage_path('app/public/images/'.$request->image);
-            $img->save($destinationPath,quality: 80, progressive: true);
+            $name = $file->getClientOriginalName();
+            $imageFile = ImageManager::read($file->getRealPath());
+            $destinationPath = storage_path('app/public/images/'.$name);
 
-            return response()->json([
-                'success' => true,
-            ]);
-        } catch (\Exception $exception){
-            return response()->json([
-                'success' => false,
-            ]);
+            $imageFile->save($destinationPath,quality: 80, progressive: true);
+
         }
 
-
-//        return $img->getClientOriginalExtension();
     }
 }
