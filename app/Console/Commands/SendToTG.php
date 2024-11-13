@@ -73,15 +73,36 @@ class SendToTG extends Command
             // Verifică dacă articolul a fost deja postat
             $existsOnTelegram = ArticleTelegramPost::where('article_title', $object->title)->exists();
             if (!$existsOnTelegram) {
+                $sendPhoto = false;
 
+                // Verifică dacă imaginea este accesibilă
+                if ($object->media_url) {
+                    $context = stream_context_create([
+                        'http' => [
+                            'method' => 'HEAD'
+                        ]
+                    ]);
+                    $headers = @get_headers($object->media_url, 1, $context);
+                    $sendPhoto = $headers && strpos($headers[0], '200') !== false;
+                }
 
                 // Trimite mesajul pe Telegram
-                $response = $this->telegram->sendPhoto([
-                    'chat_id' => env('TELEGRAM_CHAT_ID'),
-                    'caption' => "<b>{$object->title}</b>\n\n{$object->description}\n\n<a href=\"{$object->link}\">Citește mai mult</a>",
-                    'photo' => InputFile::create($object->media_url),
-                    'parse_mode' => 'HTML',
-                ]);
+                if ($sendPhoto) {
+                    // Trimite mesaj cu imagine
+                    $response = $this->telegram->sendPhoto([
+                        'chat_id' => env('TELEGRAM_CHAT_ID'),
+                        'caption' => "<b>{$object->title}</b>\n\n{$object->description}\n\n<a href=\"{$object->link}\">Citește mai mult</a>",
+                        'photo' => InputFile::create($object->media_url),
+                        'parse_mode' => 'HTML',
+                    ]);
+                } else {
+                    // Trimite mesaj text fără imagine
+                    $response = $this->telegram->sendMessage([
+                        'chat_id' => env('TELEGRAM_CHAT_ID'),
+                        'text' => "<b>{$object->title}</b>\n\n{$object->description}\n\n<a href=\"{$object->link}\">Citește mai mult</a>",
+                        'parse_mode' => 'HTML',
+                    ]);
+                }
 
                 // Salvează ID-ul mesajului în baza de date
                 ArticleTelegramPost::create([
